@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model NewsItem {
+  id          String   @id
+  headline    String
+  location    String
+  summary     String
+  category    String
+  // Storing coordinates as a JSON string or comma-separated string since SQLite handles scalar lists poorly without extra setup
+  coordinates String   
+  timestamp   DateTime
+  createdAt   DateTime @default(now())
+  
+  tweets      Tweet[]
+  queries     SearchQuery[]
+}
+
+model Tweet {
+  id         String   @id
+  author     String
+  name       String?
+  text       String
+  url        String?
+  timestamp  String?
+  likes      String?
+  replies    String?
+  reposts    String?
+  profilePic String?
+  
+  // Relation to NewsItem
+  newsItemId String
+  newsItem   NewsItem @relation(fields: [newsItemId], references: [id], onDelete: Cascade)
+}
+
+model SearchQuery {
+  id            String   @id @default(uuid())
+  originalQuery String
+  normalizedKey String   // The "standardized" key from Grok (e.g., "france news")
+  timestamp     DateTime @default(now())
+  
+  // Many-to-many relation implicitly (or we can explicit it if needed, but implicit is cleaner for simple caching)
+  // Actually, to keep it simple with SQLite, let's just make it a JSON list of IDs or a relation.
+  // Standard relation:
+  items         NewsItem[]
+}

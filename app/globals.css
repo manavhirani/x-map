@@ -1,0 +1,199 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: oklch(0.708 0 0 / 0.5);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+/* MapLibre Control Styling */
+.maplibregl-ctrl-group {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.maplibregl-ctrl-group button {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.maplibregl-ctrl-group button:last-child {
+  border-bottom: none !important;
+}
+
+.maplibregl-ctrl-group button:hover {
+  background: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+.maplibregl-ctrl-group button:active {
+  background: var(--muted) !important;
+}
+
+.maplibregl-ctrl-group button.maplibregl-ctrl-zoom-in,
+.maplibregl-ctrl-group button.maplibregl-ctrl-zoom-out {
+  font-size: 18px !important;
+  font-weight: 500 !important;
+}
+
+.maplibregl-ctrl-group button.maplibregl-ctrl-compass {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.maplibregl-ctrl-fullscreen,
+.maplibregl-ctrl-geolocate {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+  backdrop-filter: blur(8px);
+  width: 32px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.maplibregl-ctrl-fullscreen:hover,
+.maplibregl-ctrl-geolocate:hover {
+  background: var(--accent) !important;
+  border-color: var(--border) !important;
+}
+
+.maplibregl-ctrl-fullscreen button,
+.maplibregl-ctrl-geolocate button {
+  background: transparent !important;
+  border: none !important;
+  color: var(--foreground) !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.maplibregl-ctrl-fullscreen button:hover,
+.maplibregl-ctrl-geolocate button:hover {
+  background: transparent !important;
+  color: var(--accent-foreground) !important;
+}
+
+.maplibregl-ctrl-fullscreen button:active,
+.maplibregl-ctrl-geolocate button:active {
+  background: var(--muted) !important;
+}
+
+.maplibregl-ctrl-scale {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 4px 8px !important;
+  color: var(--foreground) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+  backdrop-filter: blur(8px);
+}
+
+.maplibregl-ctrl-attrib {
+  background: var(--card) !important;
+  border-top: 1px solid var(--border) !important;
+  color: var(--muted-foreground) !important;
+  font-size: 11px !important;
+  padding: 4px 8px !important;
+}
+
+.maplibregl-ctrl-attrib a {
+  color: var(--primary) !important;
+  text-decoration: none !important;
+}
+
+.maplibregl-ctrl-attrib a:hover {
+  text-decoration: underline !important;
+}
