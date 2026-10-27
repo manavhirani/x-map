@@ -158,7 +158,7 @@ const NewsListItem = memo(function NewsListItem({
           "w-full rounded-lg border bg-card p-3 text-left shadow-sm transition-all hover:-translate-y-px hover:shadow-md",
           selected && "ring-2 ring-offset-1 ring-offset-background",
         )}
-        style={{ borderLeft: `4px solid ${color}`, ...(selected ? { ["--tw-ring-color" as string]: color } : {}) }}
+        style={{ borderColor: `${color}66`, ...(selected ? { ["--tw-ring-color" as string]: color } : {}) }}
       >
         <h3 className="text-sm font-semibold leading-tight">{item.headline}</h3>
         <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{item.summary}</p>
