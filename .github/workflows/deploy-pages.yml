@@ -37,6 +37,8 @@ jobs:
         env:
           # "/x-map" for https://<user>.github.io/x-map/
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # Absolute URL for link previews (Open Graph / Twitter cards).
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

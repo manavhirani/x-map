@@ -10,7 +10,7 @@ Grok finds the stories. The X API adds the conversation. MapLibre GL draws the g
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![MapLibre GL 5](https://img.shields.io/badge/MapLibre_GL-5-396CB2?logo=maplibre)
 
-[**Live demo**](https://manavhirani.github.io/x-map/) · [Quick start](#quick-start) · [How it works](#how-it-works) · [Architecture](docs/architecture.md)
+[**Live demo**](https://manavhirani.github.io/x-map/) · [Quick start](#quick-start) · [Hosting](#hosting) · [How it works](#how-it-works) · [Architecture](docs/architecture.md)
 
 <img src="public/screenshots/map-dark.jpg" alt="X-Map: news stories as glowing markers on a dark 3D globe, with a story list on the left" width="100%">
 
@@ -80,6 +80,7 @@ All variables are optional.
 | `XAI_API_KEY` | Grok finds and summarises the stories. Get a key at [console.x.ai](https://console.x.ai/). | The app shows sample data. |
 | `X_BEARER_TOKEN` (or `BEARER_TOKEN`) | The X API v2 adds posts to each story. Get a token at [developer.x.com](https://developer.x.com/en/portal/dashboard). | Stories show without posts. |
 | `DATABASE_URL` | SQLite cache for stories, for example `file:./dev.db`. | The default is `file:./dev.db`. If the database does not exist, the app works without a cache. |
+| `NEXT_PUBLIC_SITE_URL` | Absolute site URL for link previews. | On Vercel, the production domain. Otherwise `https://manavhirani.github.io/x-map`. |
 
 The app ignores the placeholder values from `.env.example` (`your_..._here`).
 
@@ -113,7 +114,20 @@ flowchart LR
 
 The static demo has no server. The browser makes the same events from the sample data. For more detail, see [docs/architecture.md](docs/architecture.md).
 
-## Deploy the demo to GitHub Pages
+## Hosting
+
+There are two ways to host X-Map. Both are free for a personal demo.
+
+| | GitHub Pages | Vercel |
+| --- | --- | --- |
+| What runs | Static files only | The full Next.js app, with API routes |
+| Data | Sample data | Sample data, or live data if you add keys |
+| Setup | One setting, then push to `main` | Import the repository |
+| URL | `https://<user>.github.io/x-map/` | `https://<project>.vercel.app` |
+
+Both builds add link-preview tags (Open Graph and Twitter cards) with the globe screenshot. A link to the site in a portfolio or a post shows a preview card.
+
+### Option A: GitHub Pages (static demo)
 
 The workflow `.github/workflows/deploy-pages.yml` builds a static export with sample data and publishes it.
 
@@ -130,6 +144,23 @@ NEXT_PUBLIC_BASE_PATH=/x-map npm run build:demo   # writes the site to out/
 ```
 
 The demo build uses `.tsx` files only, so Next.js leaves out the API routes (`route.ts`).
+
+### Option B: Vercel (full app)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmanavhirani%2Fx-map)
+
+1. Select the button above, or go to [vercel.com/new](https://vercel.com/new) and import the repository.
+2. Keep the default settings. Vercel finds Next.js and runs `npm run build`.
+3. Select **Deploy**.
+
+With no environment variables, the site shows sample data.
+
+> [!WARNING]
+> If you add `XAI_API_KEY` or `X_BEARER_TOKEN` to a public deployment, every visitor uses your API credits. For a portfolio demo, do not add the keys.
+
+On Vercel, the SQLite cache is not kept between requests. The app works without it, but each live search calls Grok again.
+
+To use your own domain for link previews, set `NEXT_PUBLIC_SITE_URL` (for example `https://x-map.example.com`). On Vercel, the default is the production domain.
 
 ## Scripts
 
