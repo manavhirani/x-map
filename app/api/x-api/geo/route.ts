@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getXBearerToken } from "@/lib/server/env";
 
 const X_API_BASE = "https://api.x.com/2";
 
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
     const query = searchParams.get("query") || "";
     const maxResults = 10;
 
-    const bearerToken = process.env.X_BEARER_TOKEN || process.env.BEARER_TOKEN;
+    const bearerToken = getXBearerToken();
 
     if (!bearerToken) {
       return NextResponse.json(

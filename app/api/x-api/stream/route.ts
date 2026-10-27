@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { getXBearerToken } from "@/lib/server/env";
 import { Client, type ClientConfig } from "@xdevplatform/xdk";
 
 export async function GET(request: NextRequest) {
@@ -7,7 +8,7 @@ export async function GET(request: NextRequest) {
   const hashtag = searchParams.get("hashtag");
   const account = searchParams.get("account");
 
-  const bearerToken = process.env.X_BEARER_TOKEN;
+  const bearerToken = getXBearerToken();
 
   if (!bearerToken) {
     return new Response(

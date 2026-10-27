@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getXBearerToken } from "@/lib/server/env";
 import { Client, type ClientConfig } from "@xdevplatform/xdk";
 
 export async function GET(request: NextRequest) {
@@ -7,7 +8,7 @@ export async function GET(request: NextRequest) {
     const query = searchParams.get("query") || "Indigo";
 
     // Get credentials from environment variables
-    const bearerToken = process.env.X_BEARER_TOKEN;
+    const bearerToken = getXBearerToken();
 
     if (!bearerToken) {
       return NextResponse.json(

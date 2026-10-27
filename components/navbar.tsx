@@ -1,120 +1,81 @@
-// ... imports ...
-// REMOVE DropdownMenu imports if not used elsewhere, or keep if standard. 
-// For cleanliness, I'll revert to before the dropdown was added.
+"use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Switch } from "@/components/ui/switch";
-import {
-  Globe,
-  Map,
-  Search,
-  ChevronUp,
-  ChevronDown,
-  Radio,
-  Sparkles,
-  Newspaper,
-} from "lucide-react";
+import { Globe, Loader2, Map as MapIcon, Newspaper, Search } from "lucide-react";
+import { GitHubLogo } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { REPO_URL } from "@/lib/config";
 
 interface NavbarProps {
-  globeMode?: boolean;
-  onGlobeModeChange?: (enabled: boolean) => void;
-  mapMode?: "normal" | "heatmap";
-  onMapModeChange?: (mode: "normal" | "heatmap") => void;
-  searchQuery?: string;
-  onSearchQueryChange?: (query: string) => void;
-  onSearch?: (query: string) => void;
+  /** Search box. Hidden when not set. */
+  search?: {
+    value: string;
+    onChange: (value: string) => void;
+    onSubmit: (value: string) => void;
+  };
   loading?: boolean;
-  geoCount?: number;
-  streaming?: boolean;
-  onStreamingToggle?: () => void;
-  searchMode?: "x" | "grok";
-  onSearchModeChange?: (mode: "x" | "grok") => void;
-  sidebarOpen?: boolean;
-  onSidebarToggle?: () => void;
   onTopNews?: () => void;
+  /** Globe / flat map toggle. Hidden when not set. */
+  globe?: { enabled: boolean; onToggle: () => void };
 }
 
-export function Navbar({
-  globeMode,
-  onGlobeModeChange,
-  mapMode = "normal",
-  onMapModeChange,
-  searchQuery = "",
-  onSearchQueryChange,
-  onSearch,
-  loading = false,
-  geoCount = 0,
-  streaming = false,
-  onStreamingToggle,
-  searchMode = "x",
-  onSearchModeChange,
-  sidebarOpen = true,
-  onSidebarToggle,
-  onTopNews,
-}: NavbarProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim() && onSearch) {
-      onSearch(searchQuery.trim());
-    }
-  };
-
+export function Navbar({ search, loading = false, onTopNews, globe }: NavbarProps) {
   return (
-    <nav className="relative z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 py-3 h-full">
-        <div className="flex items-center justify-between gap-3">
-          {/* Search Input */}
-          {onSearch && onSearchQueryChange && (
-            <form onSubmit={handleSearch} className="flex-1 max-w-md">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => onSearchQueryChange(e.target.value)}
-                  placeholder="Search for topics, locations..."
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-                />
-              </div>
-            </form>
+    <nav className="relative z-30 h-14 shrink-0 border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+      <div className="mx-auto flex h-full items-center gap-3 px-3 sm:px-4">
+        <Link href="/" className="flex shrink-0 items-center gap-2 font-semibold tracking-tight" aria-label="X-Map home">
+          <span className="flex size-7 items-center justify-center rounded-lg bg-gradient-to-br from-sky-500 via-violet-500 to-rose-500 text-white shadow-sm">
+            <Globe className="size-4" />
+          </span>
+          <span className="hidden sm:inline">X-Map</span>
+        </Link>
+
+        {search && (
+          <form
+            role="search"
+            onSubmit={(e) => {
+              e.preventDefault();
+              search.onSubmit(search.value.trim());
+            }}
+            className="max-w-md flex-1"
+          >
+            <label className="relative block">
+              <span className="sr-only">Search news</span>
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="search"
+                value={search.value}
+                onChange={(e) => search.onChange(e.target.value)}
+                placeholder="Search topics or places..."
+                className="h-9 w-full rounded-lg border bg-background/70 pl-9 pr-3 text-sm outline-none transition focus:ring-2 focus:ring-ring"
+              />
+            </label>
+          </form>
+        )}
+
+        <div className="ml-auto flex items-center gap-1.5">
+          {onTopNews && (
+            <Button variant="ghost" size="sm" onClick={onTopNews} disabled={loading} title="Load top news">
+              {loading ? <Loader2 className="animate-spin" /> : <Newspaper />}
+              <span className="hidden md:inline">Top News</span>
+            </Button>
           )}
-
-          <div className="flex items-center gap-2">
-            {onTopNews && (
-              <button
-                onClick={onTopNews}
-                className="px-3 py-2 rounded-lg hover:bg-muted transition-colors flex items-center gap-2 text-sm"
-                aria-label="Load top news"
-                title="Load top news (30-40 articles)"
-              >
-                <Newspaper className="h-4 w-4" />
-                Top News
-              </button>
-            )}
-
-            {globeMode !== undefined && onGlobeModeChange && (
-              <button
-                onClick={() => onGlobeModeChange(!globeMode)}
-                className="p-2 rounded-lg hover:bg-muted transition-colors"
-                aria-label={
-                  globeMode ? "Switch to 2D map" : "Switch to 3D globe"
-                }
-                title={globeMode ? "Switch to 2D map" : "Switch to 3D globe"}
-              >
-                {globeMode ? (
-                  <Map className="h-4 w-4" />
-                ) : (
-                  <Globe className="h-4 w-4" />
-                )}
-              </button>
-            )}
-            <ThemeToggle />
-          </div>
+          {globe && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={globe.onToggle}
+              aria-label={globe.enabled ? "Switch to flat map" : "Switch to 3D globe"}
+              title={globe.enabled ? "Switch to flat map" : "Switch to 3D globe"}
+            >
+              {globe.enabled ? <MapIcon /> : <Globe />}
+            </Button>
+          )}
+          <Button variant="ghost" size="icon-sm" asChild>
+            <a href={REPO_URL} target="_blank" rel="noopener noreferrer" aria-label="Source code on GitHub">
+              <GitHubLogo />
+            </a>
+          </Button>
         </div>
       </div>
     </nav>

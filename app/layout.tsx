@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Interactive Map",
-  description: "Open-source interactive map",
+  title: "X-Map: breaking news on a 3D globe",
+  description:
+    "Open-source map of breaking news. Grok finds the stories, the X API adds the conversation, MapLibre GL draws the globe.",
 };
 
 export default function RootLayout({
@@ -13,17 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </body>
+    // The app is dark-only.
+    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+      <body>{children}</body>
     </html>
   );
 }
